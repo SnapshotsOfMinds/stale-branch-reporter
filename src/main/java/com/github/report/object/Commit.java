@@ -9,10 +9,12 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 public class Commit {
   private User author;
   private String date;
+  private String link;
 
   private Commit(Builder b) {
     this.author = b.author;
     this.date = b.date;
+    this.link = b.link;
   }
 
   /**
@@ -34,11 +36,21 @@ public class Commit {
   }
 
   /**
+   * Get the commit's link.
+   *
+   * @return The commit's link.
+   */
+  public String getLink() {
+    return link;
+  }
+
+  /**
    * Builder class used to create a Commit object.
    */
   public static class Builder {
     private User author;
     private String date;
+    private String link;
 
     /**
      * Default constructor.
@@ -46,6 +58,7 @@ public class Commit {
     public Builder() {
       author = null;
       date = "";
+      link = "";
     }
 
     /**
@@ -56,6 +69,7 @@ public class Commit {
     public Builder(Commit commit) {
       this.author = commit.author;
       this.date = commit.date;
+      this.link = commit.link;
     }
 
     /**
@@ -81,6 +95,17 @@ public class Commit {
     }
 
     /**
+     * Setter to set the link.
+     *
+     * @param link The link information.
+     * @return The builder object with the link set.
+     */
+    public Builder link(String link) {
+      this.link = link;
+      return this;
+    }
+
+    /**
      * This method calls the constructor for Commit and returns the object that is created.
      *
      * @return The Commit object created from the data in the Builder class.
@@ -92,7 +117,7 @@ public class Commit {
 
   @Override
   public String toString() {
-    return "[{Commit} " + "Author: " + author + ", Date: " + date;
+    return "[{Commit} " + "Author: " + author + ", Date: " + date + ", Link: " + link;
   }
 
   @Override
@@ -106,11 +131,11 @@ public class Commit {
     }
 
     final Commit other = (Commit) o;
-    return Objects.equals(this.author, other.author) && Objects.equals(this.date, other.date);
+    return Objects.equals(this.author, other.author) && Objects.equals(this.date, other.date) && Objects.equals(this.link, other.link);
   }
 
   @Override
   public int hashCode() {
-    return new HashCodeBuilder().append(this.date).append(this.author).append(this.date).toHashCode();
+    return new HashCodeBuilder().append(this.date).append(this.author).append(this.date).append(this.link).toHashCode();
   }
 }

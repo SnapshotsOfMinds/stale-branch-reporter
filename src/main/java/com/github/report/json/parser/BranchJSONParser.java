@@ -81,10 +81,9 @@ public class BranchJSONParser extends JSONParser<Branch> {
           .avatar(!jsonTag.isEmpty() ? jsonCommitObject.getJSONObject(jsonTag).getString(AVATAR_TAG) : "").build();
 
       String commitDate = jsonCommitObject.getJSONObject(COMMIT_TAG).getJSONObject(AUTHOR_TAG).getString(DATE_TAG);
-      Commit commit = new Commit.Builder().author(user).date(commitDate).build();
+      Commit commit = new Commit.Builder().author(user).date(commitDate).link(jsonCommitObject.getString(HTML_TAG)).build();
 
-      branches.add(new Branch.Builder().name(jsonStatusObject.getString(NAME_TAG)).link(jsonCommitObject.getString(HTML_TAG)).commit(commit).isActive(isBranchActive())
-          .inactiveAge(caclulateBranchAge(commitDate)).build());
+      branches.add(new Branch.Builder().name(jsonStatusObject.getString(NAME_TAG)).commit(commit).isActive(isBranchActive()).inactiveAge(caclulateBranchAge(commitDate)).build());
     }
 
     return branches;

@@ -31,7 +31,7 @@ public class Repository {
 
   @Override
   public String toString() {
-    return "[{Repository} Name: " + name + (!branches.isEmpty() ? ", Branches: " + branches.stream().map(Branch::toString).collect(Collectors.joining("\n")) : "");
+    return "[{Repository} Name: " + name + (!branches.isEmpty() ? ", Branches:\n\t" + branches.stream().map(Branch::toString).collect(Collectors.joining("\n")) : "");
   }
 
   @Override

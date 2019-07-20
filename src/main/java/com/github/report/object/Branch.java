@@ -8,7 +8,6 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  */
 public class Branch {
   private String name;
-  private String link;
   private Commit commit;
   private boolean isActive;
   private String inactiveAge;
@@ -16,9 +15,8 @@ public class Branch {
 
   private Branch(Builder b) {
     this.name = b.name;
-    this.isActive = b.isActive;
     this.commit = b.commit;
-    this.link = b.link;
+    this.isActive = b.isActive;
     this.inactiveAge = b.inactiveAge;
     this.jiraStory = b.jiraStory;
   }
@@ -30,15 +28,6 @@ public class Branch {
    */
   public String getName() {
     return name;
-  }
-
-  /**
-   * Get the branch's link.
-   *
-   * @return The branch's link.
-   */
-  public String getLink() {
-    return link;
   }
 
   /**
@@ -82,7 +71,6 @@ public class Branch {
    */
   public static class Builder {
     private String name;
-    private String link;
     private Commit commit;
     private boolean isActive;
     private String inactiveAge;
@@ -93,7 +81,6 @@ public class Branch {
      */
     public Builder() {
       name = "";
-      link = "";
       commit = null;
       isActive = false;
       inactiveAge = "";
@@ -107,7 +94,6 @@ public class Branch {
      */
     public Builder(Branch branch) {
       this.name = branch.name;
-      this.link = branch.link;
       this.commit = branch.commit;
       this.isActive = branch.isActive;
       this.inactiveAge = branch.inactiveAge;
@@ -122,17 +108,6 @@ public class Branch {
      */
     public Builder name(String name) {
       this.name = name;
-      return this;
-    }
-
-    /**
-     * Setter to set the link.
-     *
-     * @param link The branch's link.
-     * @return The builder object with the link set.
-     */
-    public Builder link(String link) {
-      this.link = link;
       return this;
     }
 
@@ -192,7 +167,7 @@ public class Branch {
 
   @Override
   public String toString() {
-    return "[{Branch} " + "Name: " + name + ", Link: " + link + ", Commit: " + commit + ", Is Active: " + isActive + ", Time Since Active: " + inactiveAge + ", Jira Story: " + jiraStory;
+    return "[{Branch} " + "Name: " + name + ", Commit: " + commit + ", Is Active: " + isActive + ", Time Since Active: " + inactiveAge + ", Jira Story: " + jiraStory;
   }
 
   @Override
@@ -206,12 +181,12 @@ public class Branch {
     }
 
     final Branch other = (Branch) o;
-    return Objects.equals(this.name, other.name) && Objects.equals(this.link, other.link) && Objects.equals(this.commit, other.commit) && this.isActive == other.isActive
-        && Objects.equals(this.inactiveAge, other.inactiveAge) && Objects.equals(this.jiraStory, other.jiraStory);
+    return Objects.equals(this.name, other.name) && Objects.equals(this.commit, other.commit) && this.isActive == other.isActive && Objects.equals(this.inactiveAge, other.inactiveAge)
+        && Objects.equals(this.jiraStory, other.jiraStory);
   }
 
   @Override
   public int hashCode() {
-    return new HashCodeBuilder().append(this.name).append(link).append(commit).append(this.isActive).append(inactiveAge).append(jiraStory).toHashCode();
+    return new HashCodeBuilder().append(this.name).append(commit).append(this.isActive).append(inactiveAge).append(jiraStory).toHashCode();
   }
 }
