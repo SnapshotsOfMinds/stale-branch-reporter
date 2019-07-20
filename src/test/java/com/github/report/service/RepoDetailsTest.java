@@ -8,14 +8,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import com.github.report.model.StaleBranchData;
+import com.github.report.json.parser.RepoJSONParser;
+import com.github.report.object.Repository;
 
 @ExtendWith({ MockitoExtension.class })
 public class RepoDetailsTest
 {
     @Spy
-    private RepoDetails spyRepoDetails;
+    private RepoJSONParser spyRepoDetails;
 
     @Test
     public void getRepoInfo_Succes()
@@ -25,10 +25,10 @@ public class RepoDetailsTest
                 + "    \"name\": \"centralized-schema-deployment\"\r\n" + "   },\r\n" + "   {\r\n"
                 + "    \"id\": 57855,\r\n" + "    \"name\": \"ui-console\"\r\n" + "   }\r\n" + " ]";
 
-        ArrayList<StaleBranchData> expected_repo_list = new ArrayList<>();
-        StaleBranchData repo1 = new StaleBranchData();
+        ArrayList<Repository> expected_repo_list = new ArrayList<>();
+        Repository repo1 = new Repository();
         repo1.setRepoName("centralized-schema-deployment");
-        StaleBranchData repo2 = new StaleBranchData();
+        Repository repo2 = new Repository();
         repo2.setRepoName("ui-console");
 
         expected_repo_list.add(repo1);

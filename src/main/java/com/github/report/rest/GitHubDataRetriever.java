@@ -101,7 +101,7 @@ public class GitHubDataRetriever extends DataRetriever {
    * @return The JSON representation of the commit details.
    * @throws RestServiceException If unable to retrieve the information.
    */
-  public String retrieveCommits(String commitURL) throws RestServiceException {
+  public String retrieveCommit(String commitURL) throws RestServiceException {
     return retreiveGitHubData(commitURL);
   }
 }

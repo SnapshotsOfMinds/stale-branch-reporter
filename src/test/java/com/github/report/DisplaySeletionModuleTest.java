@@ -21,14 +21,14 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.github.report.email.MailContent;
+import com.github.report.json.parser.BranchJSONParser;
+import com.github.report.json.parser.RepoJSONParser;
 import com.github.report.json.parser.UserJSONParser;
-import com.github.report.model.Branch;
-import com.github.report.model.StaleBranchData;
+import com.github.report.object.Branch;
 import com.github.report.object.Organization;
+import com.github.report.object.Repository;
 import com.github.report.object.User;
-import com.github.report.service.BranchDetails;
 import com.github.report.service.BranchService;
-import com.github.report.service.RepoDetails;
 import com.github.report.service.RepoService;
 import com.github.report.service.StaleBranches;
 import com.github.report.service.UserService;
@@ -39,7 +39,7 @@ public class DisplaySeletionModuleTest
     @Mock
     private BranchService mockBranchService;
     @Mock
-    private BranchDetails mockBranchDetails;
+    private BranchJSONParser mockBranchDetails;
     @Mock
     private Organization mockOrg;
     @Mock
@@ -47,7 +47,7 @@ public class DisplaySeletionModuleTest
     @Mock
     private RepoService mockRepoService;
     @Mock
-    private RepoDetails mockRepoDetails;
+    private RepoJSONParser mockRepoDetails;
     @Mock
     private UserService mockUserService;
     @Mock
@@ -92,11 +92,11 @@ public class DisplaySeletionModuleTest
         mockStaleBranchList.add(mockStaleBranch);
         mockStaleBranchList.add(mockStaleBranch2);
 
-        StaleBranchData repo1 = new StaleBranchData();
+        Repository repo1 = new Repository();
         repo1.setRepoName("business_Logic_Module");
         repo1.setStaleBranchList(mockStaleBranchList);
 
-        ArrayList<StaleBranchData> mockRepoList = new ArrayList<>();
+        ArrayList<Repository> mockRepoList = new ArrayList<>();
         mockRepoList.add(repo1);
 
         ArrayList<Branch> mockBranchList = new ArrayList<>();
@@ -123,10 +123,10 @@ public class DisplaySeletionModuleTest
     @Test
     public void displayRepoList_Sucess() throws JSONException, IOException
     {
-        StaleBranchData repo1 = new StaleBranchData();
+        Repository repo1 = new Repository();
         repo1.setRepoName("business_Logic_Module");
 
-        ArrayList<StaleBranchData> mockRepoList = new ArrayList<>();
+        ArrayList<Repository> mockRepoList = new ArrayList<>();
         mockRepoList.add(repo1);
 
         when(spyDisplaySeletionModule.getRepoService()).thenReturn(mockRepoService);
@@ -143,10 +143,10 @@ public class DisplaySeletionModuleTest
     @Test
     public void displayUsersList_Success() throws IOException
     {
-        StaleBranchData repo1 = new StaleBranchData();
+        Repository repo1 = new Repository();
         repo1.setRepoName("business_Logic_Module");
 
-        ArrayList<StaleBranchData> mockRepoList = new ArrayList<>();
+        ArrayList<Repository> mockRepoList = new ArrayList<>();
         mockRepoList.add(repo1);
 
         User mockUser1 = new User();
@@ -197,10 +197,10 @@ public class DisplaySeletionModuleTest
         mockStaleBranchList.add(mockStaleBranch);
         mockStaleBranchList.add(mockStaleBranch2);
 
-        StaleBranchData repo1 = new StaleBranchData();
+        Repository repo1 = new Repository();
         repo1.setRepoName("business_Logic_Module");
 
-        ArrayList<StaleBranchData> mockRepoList = new ArrayList<>();
+        ArrayList<Repository> mockRepoList = new ArrayList<>();
         mockRepoList.add(repo1);
 
         String ExpectedMailBody = "Mail Content as String";

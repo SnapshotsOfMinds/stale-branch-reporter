@@ -15,9 +15,9 @@ import javax.mail.internet.MimeMessage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import com.github.report.exception.EmailException;
-import com.github.report.model.Branch;
-import com.github.report.model.StaleBranchData;
+import com.github.report.object.Branch;
 import com.github.report.object.Organization;
+import com.github.report.object.Repository;
 import com.github.report.tool.I18NMessageUtility;
 
 /**
@@ -82,12 +82,12 @@ public class EmailBuilder {
   /**
    * Create the body of the message.
    *
-   * @param repoStaleBranchList The {@link List} of {@link StaleBranchData}.
+   * @param repos The {@link List} of {@link Repository Repositories}.
    * @param org The {@link Organization} for which the branches belong.
    * @param stalePeriod The time period used when checking for staleness.
    * @return A string representation of the message body in HTML format.
    */
-  public String createBody(List<StaleBranchData> repoStaleBranchList, Organization org, int stalePeriod) {
+  public String createBody(List<Repository> repos, Organization org, int stalePeriod) {
     // @formatter:off
         String body = MessageFormat.format(
                 "<html>"
@@ -113,33 +113,35 @@ public class EmailBuilder {
                 I18N_MESSAGE_UTILITY.getMessage("AGE_COLUMN_HEADER"), I18N_MESSAGE_UTILITY.getMessage("AUTHOR_COLUMN_HEADER"),
                 I18N_MESSAGE_UTILITY.getMessage("JIRA_STATUS_HEADER"));
 
-        // @formatter:on
+    // @formatter:on
     StringBuilder mailBody = new StringBuilder(body);
 
-    for (StaleBranchData repo : repoStaleBranchList) {
+    for (Repository repo : repos) {
       mailBody.append("<tr>");
       mailBody.append("<td colspan=\"4\"><b>").append(I18N_MESSAGE_UTILITY.getMessage("REPOSITORY_HEADER")).append(" : ").append("&nbsp" + repo.getRepoName() + "&nbsp").append("</b></td>");
       mailBody.append("</tr>");
 
-      for (Branch staleBranch : repo.getStaleBranchList()) {
+      for (Branch branch : repo.getStaleBranches()) {
         mailBody.append("<tr>");
         // Branch Name with link
-        mailBody.append("<td><a href =" + staleBranch.getBranchLink() + ">").append(staleBranch.getBranchName()).append("</a></td>");
+        mailBody.append("<td><a href =" + branch.getLink() + ">").append(branch.getName()).append("</a></td>");
 
         // Branch Age
-        mailBody.append("<td>").append(staleBranch.getTimeStamp()).append("</td>");
+        mailBody.append("<td>").append(branch.getInactiveAge()).append("</td>");
 
         // Branch avatar and author name
-        mailBody.append("<td align=\"left\"><img src=" + staleBranch.getUser().getAvatar() + "alt=" + staleBranch.getUser().getLogin() + "height=\"18\" width=\"18\" /> ")
-            .append(staleBranch.getUser().getLogin()).append("</td>");
+        mailBody
+            .append(
+                "<td align=\"left\"><img src=" + branch.getMostRecentCommit().getAuthor().getAvatar() + "alt=" + branch.getMostRecentCommit().getAuthor().getLogin() + "height=\"18\" width=\"18\" /> ")
+            .append(branch.getMostRecentCommit().getAuthor().getLogin()).append("</td>");
 
         // Jira Status
         mailBody.append("<td>");
-        if (staleBranch.getIssue() != null) {
-          if (staleBranch.getIssue().getStatus().equalsIgnoreCase("Closed")) {
-            mailBody.append("<font color=\"red\">").append(staleBranch.getIssue().getStatus()).append("</font>");
+        if (branch.getIssue() != null) {
+          if (branch.getIssue().getStatus().equalsIgnoreCase("Closed")) {
+            mailBody.append("<font color=\"red\">").append(branch.getIssue().getStatus()).append("</font>");
           } else {
-            mailBody.append(staleBranch.getIssue().getStatus());
+            mailBody.append(branch.getIssue().getStatus());
           }
         } else {
           mailBody.append("n/a");

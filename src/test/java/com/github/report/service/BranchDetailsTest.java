@@ -13,14 +13,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import com.github.report.model.Branch;
+import com.github.report.json.parser.BranchJSONParser;
+import com.github.report.object.Branch;
 
 @ExtendWith({ MockitoExtension.class })
 public class BranchDetailsTest
 {
     @Spy
-    private BranchDetails spyBranchDetails;
+    private BranchJSONParser spyBranchDetails;
 
     @Mock
     private BranchService mockBranchService;

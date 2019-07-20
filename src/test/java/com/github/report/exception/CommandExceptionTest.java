@@ -4,9 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
 /**
- * Test class for the {@link RestServiceException}.
+ * Test class for {@link CommandException}.
  */
-public class RestServiceExceptionTest {
+public class CommandExceptionTest {
   private final String TEST_MESSAGE = "ThIs MESSage IS a test.";
   private final String THROWABLE_MESSAGE = "THIS Is A THROWable message";
 
@@ -15,7 +15,7 @@ public class RestServiceExceptionTest {
    */
   @Test
   public void validateEmptyConstructor() {
-    RestServiceException e1 = new RestServiceException();
+    CommandException e1 = new CommandException();
 
     assertEquals(null, e1.getMessage());
   }
@@ -25,7 +25,7 @@ public class RestServiceExceptionTest {
    */
   @Test
   public void validateStringConstructor() {
-    RestServiceException e1 = new RestServiceException(TEST_MESSAGE);
+    CommandException e1 = new CommandException(TEST_MESSAGE);
 
     assertEquals(TEST_MESSAGE, e1.getMessage());
   }
@@ -36,7 +36,7 @@ public class RestServiceExceptionTest {
   @Test
   public void validateThrowableConstructor() {
     Throwable t1 = new Throwable(THROWABLE_MESSAGE);
-    RestServiceException e1 = new RestServiceException(t1);
+    CommandException e1 = new CommandException(t1);
 
     assertEquals(t1, e1.getCause());
     assertEquals(THROWABLE_MESSAGE, e1.getMessage());
@@ -48,7 +48,7 @@ public class RestServiceExceptionTest {
   @Test
   public void validateMessageThrowableConstructor() {
     Throwable t1 = new Throwable(THROWABLE_MESSAGE);
-    RestServiceException e1 = new RestServiceException(TEST_MESSAGE, t1);
+    CommandException e1 = new CommandException(TEST_MESSAGE, t1);
 
     assertEquals(t1, e1.getCause());
     assertEquals(TEST_MESSAGE, e1.getMessage());

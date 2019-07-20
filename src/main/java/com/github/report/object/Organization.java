@@ -41,7 +41,7 @@ public class Organization {
 
   @Override
   public String toString() {
-    return "[{Organization} Name: " + name + "Image URL: " + image;
+    return "[{Organization} Name: " + name + ", Image URL: " + image;
   }
 
   @Override

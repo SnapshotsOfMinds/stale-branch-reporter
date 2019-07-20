@@ -15,8 +15,8 @@ import com.beust.jcommander.ParameterException;
 import com.github.report.email.EmailBuilder;
 import com.github.report.email.EmailSender;
 import com.github.report.exception.EmailException;
-import com.github.report.model.StaleBranchData;
 import com.github.report.object.Organization;
+import com.github.report.object.Repository;
 import com.github.report.rest.GitHubDataRetriever;
 import com.github.report.service.StaleBranches;
 
@@ -88,7 +88,7 @@ public class App
                 stalePeriod = 30;
             }
 
-            List<StaleBranchData> repoList = getDisplaySelectionModule().displayRepoList(org);
+            List<Repository> repoList = getDisplaySelectionModule().displayRepoList(org);
 
             String mailBody = getDisplaySelectionModule().displayStaleBranches(repoList, org, stalePeriod);
 

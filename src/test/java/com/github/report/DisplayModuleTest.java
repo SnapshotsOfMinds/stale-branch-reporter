@@ -9,9 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import com.github.report.model.Branch;
-import com.github.report.model.StaleBranchData;
+import com.github.report.object.Branch;
+import com.github.report.object.Repository;
 import com.github.report.object.User;
 
 @ExtendWith({ MockitoExtension.class })
@@ -23,8 +22,8 @@ public class DisplayModuleTest
     @Test
     public void displayRepo_succes()
     {
-        ArrayList<StaleBranchData> repoList = new ArrayList<>();
-        StaleBranchData repo1 = new StaleBranchData();
+        ArrayList<Repository> repoList = new ArrayList<>();
+        Repository repo1 = new Repository();
         repo1.setRepoName("repo1");
         repoList.add(repo1);
         spyDisplayModule.displayRepo(repoList);

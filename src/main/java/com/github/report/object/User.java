@@ -4,7 +4,7 @@ import java.util.Objects;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
- *
+ * Object representation of a User.
  */
 public class User {
   private String login;
@@ -142,7 +142,7 @@ public class User {
 
   @Override
   public String toString() {
-    return "[{User} " + "Login: " + login + "Name: " + name + "Email: " + email + "Avatar URL: " + avatar;
+    return "[{User} " + "Login: " + login + ", Name: " + name + ", Email: " + email + ", Avatar URL: " + avatar;
   }
 
   @Override

@@ -6,27 +6,28 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import com.github.report.exception.JSONParseException;
-import com.github.report.object.User;
+import com.github.report.object.Repository;
 
 /**
- * Class responsible for parsing JSON data into {@link User} objects.
+ * Class responsible for parsing JSON data into {@link Repository} objects.
  */
-public class UserJSONParser extends JSONParser<User> {
+public class RepoJSONParser extends JSONParser<Repository> {
   @Override
-  public List<User> parse(String jsonData) throws JSONParseException {
-    List<User> users = new ArrayList<>();
+  public List<Repository> parse(String jsonData) throws JSONParseException {
+    List<Repository> repos = new ArrayList<>();
 
     try {
       JSONArray jsonArray = getJSONArray(jsonData);
+
       for (int i = 0; i < jsonArray.length(); i++) {
         JSONObject json = jsonArray.getJSONObject(i);
 
-        users.add(new User.Builder().login(json.getString("login")).build());
+        repos.add(new Repository(json.getString("name")));
       }
     } catch (JSONException e) {
       throw new JSONParseException(e);
     }
 
-    return users;
+    return repos;
   }
 }

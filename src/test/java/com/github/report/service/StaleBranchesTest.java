@@ -15,10 +15,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import com.github.report.model.Branch;
-import com.github.report.model.StaleBranchData;
+import com.github.report.json.parser.BranchJSONParser;
+import com.github.report.object.Branch;
 import com.github.report.object.Organization;
+import com.github.report.object.Repository;
 import com.github.report.object.User;
 
 @ExtendWith({ MockitoExtension.class })
@@ -30,7 +30,7 @@ public class StaleBranchesTest
     @Mock
     private BranchService mockBranchService;
     @Mock
-    private BranchDetails mockBranchDetails;
+    private BranchJSONParser mockBranchDetails;
 
     @Test
     public void StaleBranches_success() throws Exception
@@ -63,11 +63,11 @@ public class StaleBranchesTest
         mockStaleBranchList.add(mockStaleBranch);
         mockStaleBranchList.add(mockStaleBranch2);
 
-        StaleBranchData repo1 = new StaleBranchData();
+        Repository repo1 = new Repository();
         repo1.setRepoName("business_Logic_Module");
         repo1.setStaleBranchList(mockStaleBranchList);
 
-        ArrayList<StaleBranchData> mockRepoList = new ArrayList<>();
+        ArrayList<Repository> mockRepoList = new ArrayList<>();
         mockRepoList.add(repo1);
 
         ArrayList<Branch> mockBranchList = new ArrayList<>();
@@ -87,7 +87,7 @@ public class StaleBranchesTest
         when(mockBranchDetails.getEmailIDs()).thenReturn(emailIDs);
         Organization org = new Organization();
         org.setOrgName("SomeOrgName");
-        ArrayList<StaleBranchData> repo_StaleBranch = spyStaleBranches.retrieveStaleBranches(mockRepoList, org, stalePeriod);
+        ArrayList<Repository> repo_StaleBranch = spyStaleBranches.retrieveStaleBranches(mockRepoList, org, stalePeriod);
 
         assertEquals("business_Logic_Module", repo_StaleBranch.get(0).getRepoName());
     }
