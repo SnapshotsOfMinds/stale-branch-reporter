@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="ERROR" name="stale-branch-report-logging" monitorInterval="30">
+    <Properties>
+        <Property name="LOG_LEVEL">TRACE</Property>
+    </Properties>
+    <Appenders>
+        <!-- Appender to route logs to the console. -->
+        <Console name="console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{MM-dd-yyyy HH:mm:ss,SSS z}{GMT};;[%m];;%C.%M;;%p;;%t%n" />
+        </Console>
+
+        <RollingFile name="rolling" fileName="logs/stale-branch-report.log" filePattern="logs/stale-branch-report_%d{yyyyMMdd-HHmmss}.%i">
+            <PatternLayout>
+                <pattern>%d{MM-dd-yyyy HH:mm:ss,SSS z}{GMT};;[%m];;%C.%M;;%p;;%t%n</pattern>
+            </PatternLayout>
+            <Policies>
+                <OnStartupTriggeringPolicy />
+            </Policies>
+            <DefaultRolloverStrategy fileIndex="min" min="1" max="3" />
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        <Root level="${LOG_LEVEL}">
+            <AppenderRef ref="console" />
+            <AppenderRef ref="rolling" />
+        </Root>
+    </Loggers>
+
+</Configuration>
