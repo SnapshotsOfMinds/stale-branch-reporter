@@ -7,16 +7,13 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
-
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import com.github.report.exception.EmailException;
 import com.github.report.model.Branch;
 import com.github.report.model.StaleBranchData;
@@ -26,79 +23,72 @@ import com.github.report.tool.I18NMessageUtility;
 /**
  * Class responsible for creating an Email message.
  */
-public class EmailBuilder
-{
-    private static final Logger LOGGER = LogManager.getLogger();
-    private static final I18NMessageUtility I18N_MESSAGE_UTILITY = new I18NMessageUtility();
+public class EmailBuilder {
+  private static final Logger LOGGER = LogManager.getLogger();
+  private static final I18NMessageUtility I18N_MESSAGE_UTILITY = new I18NMessageUtility();
 
-    private static final String EMAIL_ADDRESS = "svcIPDEVinstsolusr@cerner.com";
+  private static final String EMAIL_ADDRESS = "svcIPDEVinstsolusr@cerner.com";
 
-    private static final String CONTENT_TYPE = "Content-type";
-    private static final String HTML_TYPE = "text/HTML";
-    private static final String CONTENT_VALUE = HTML_TYPE + "; charset=UTF-8";
-    private static final String FORMAT = "format";
-    private static final String FORMAT_VALUE = "flowed";
-    private static final String ENCODING = "Content-Transfer-Encoding";
-    private static final String ENCODING_VALUE = "8bit";
-    private static final String SUBJECT_CHARSET = "UTF-8";
+  private static final String CONTENT_TYPE = "Content-type";
+  private static final String HTML_TYPE = "text/HTML";
+  private static final String CONTENT_VALUE = HTML_TYPE + "; charset=UTF-8";
+  private static final String FORMAT = "format";
+  private static final String FORMAT_VALUE = "flowed";
+  private static final String ENCODING = "Content-Transfer-Encoding";
+  private static final String ENCODING_VALUE = "8bit";
+  private static final String SUBJECT_CHARSET = "UTF-8";
 
-    /**
-     * Utility method to send simple HTML email
-     *
-     * @param session The mail {@link Session}.
-     * @param mailingList The {@link Set} of email addresses to send to.
-     * @param subject The subject of the message.
-     * @param body The body of the message.
-     * @param org The {@link Organization} sender belongs to.
-     * @return The {@link MimeMessage} with the header populated.
-     * @throws EmailException If unable to create the message with the header information.
-     */
-    public MimeMessage finalizeMessage(Session session, Set<String> mailingList, String subject, String body, Organization org) throws EmailException
-    {
-        LOGGER.info(I18N_MESSAGE_UTILITY.getMessage("CREATING_EMAIL"));
-        try
-        {
-            MimeMessage msg = getMimeMessage(session);
+  /**
+   * Utility method to send simple HTML email
+   *
+   * @param session The mail {@link Session}.
+   * @param mailingList The {@link Set} of email addresses to send to.
+   * @param subject The subject of the message.
+   * @param body The body of the message.
+   * @param org The {@link Organization} sender belongs to.
+   * @return The {@link MimeMessage} with the header populated.
+   * @throws EmailException If unable to create the message with the header information.
+   */
+  public MimeMessage finalizeMessage(Session session, Set<String> mailingList, String subject, String body, Organization org) throws EmailException {
+    LOGGER.info(I18N_MESSAGE_UTILITY.getMessage("CREATING_EMAIL"));
+    try {
+      MimeMessage msg = getMimeMessage(session);
 
-            // set message headers
-            msg.addHeader(CONTENT_TYPE, CONTENT_VALUE);
-            msg.addHeader(FORMAT, FORMAT_VALUE);
-            msg.addHeader(ENCODING, ENCODING_VALUE);
+      // set message headers
+      msg.addHeader(CONTENT_TYPE, CONTENT_VALUE);
+      msg.addHeader(FORMAT, FORMAT_VALUE);
+      msg.addHeader(ENCODING, ENCODING_VALUE);
 
-            msg.setFrom(new InternetAddress(EMAIL_ADDRESS, org.getOrgName()));
+      msg.setFrom(new InternetAddress(EMAIL_ADDRESS, org.getOrgName()));
 
-            msg.setReplyTo(InternetAddress.parse(EMAIL_ADDRESS, false));
+      msg.setReplyTo(InternetAddress.parse(EMAIL_ADDRESS, false));
 
-            msg.setSubject(subject, SUBJECT_CHARSET);
+      msg.setSubject(subject, SUBJECT_CHARSET);
 
-            msg.setContent(body, HTML_TYPE);
+      msg.setContent(body, HTML_TYPE);
 
-            msg.setSentDate(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
+      msg.setSentDate(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
 
-            for (String mailID : mailingList)
-            {
-                msg.addRecipients(Message.RecipientType.TO, InternetAddress.parse(mailID, false));
-            }
+      for (String mailID : mailingList) {
+        msg.addRecipients(Message.RecipientType.TO, InternetAddress.parse(mailID, false));
+      }
 
-            return msg;
-        }
-        catch (MessagingException | UnsupportedEncodingException e)
-        {
-            throw new EmailException(I18N_MESSAGE_UTILITY.getMessage("EMAIL_HEADER_FAILURE"), e);
-        }
+      return msg;
+    } catch (MessagingException | UnsupportedEncodingException e) {
+      throw new EmailException(I18N_MESSAGE_UTILITY.getMessage("EMAIL_HEADER_FAILURE"), e);
     }
+  }
 
-    /**
-     * Create the body of the message.
-     *
-     * @param repoStaleBranchList The {@link List} of {@link StaleBranchData}.
-     * @param org The {@link Organization} for which the branches belong.
-     * @param stalePeriod The time period used when checking for staleness.
-     * @return A string representation of the message body in HTML format.
-     */
-    public String createBody(List<StaleBranchData> repoStaleBranchList, Organization org, int stalePeriod)
-    {
-        // @formatter:off
+  /**
+   * Create the body of the message.
+   *
+   * @param repoStaleBranchList The {@link List} of {@link StaleBranchData}.
+   * @param org The {@link Organization} for which the branches belong.
+   * @param stalePeriod The time period used when checking for staleness.
+   * @return A string representation of the message body in HTML format.
+   */
+  public String createBody(List<StaleBranchData> repoStaleBranchList, Organization org, int stalePeriod) {
+    // @formatter:off
         String body = MessageFormat.format(
                 "<html>"
                     + "<h4>"
@@ -124,64 +114,53 @@ public class EmailBuilder
                 I18N_MESSAGE_UTILITY.getMessage("JIRA_STATUS_HEADER"));
 
         // @formatter:on
-        StringBuilder mailBody = new StringBuilder(body);
+    StringBuilder mailBody = new StringBuilder(body);
 
-        for (StaleBranchData repo : repoStaleBranchList)
-        {
-            mailBody.append("<tr>");
-            mailBody.append("<td colspan=\"4\"><b>").append(I18N_MESSAGE_UTILITY.getMessage("REPOSITORY_HEADER")).append(" : ")
-                    .append("&nbsp" + repo.getRepoName() + "&nbsp").append("</b></td>");
-            mailBody.append("</tr>");
+    for (StaleBranchData repo : repoStaleBranchList) {
+      mailBody.append("<tr>");
+      mailBody.append("<td colspan=\"4\"><b>").append(I18N_MESSAGE_UTILITY.getMessage("REPOSITORY_HEADER")).append(" : ").append("&nbsp" + repo.getRepoName() + "&nbsp").append("</b></td>");
+      mailBody.append("</tr>");
 
-            for (Branch staleBranch : repo.getStaleBranchList())
-            {
-                mailBody.append("<tr>");
-                // Branch Name with link
-                mailBody.append("<td><a href =" + staleBranch.getBranchLink() + ">").append(staleBranch.getBranchName()).append("</a></td>");
+      for (Branch staleBranch : repo.getStaleBranchList()) {
+        mailBody.append("<tr>");
+        // Branch Name with link
+        mailBody.append("<td><a href =" + staleBranch.getBranchLink() + ">").append(staleBranch.getBranchName()).append("</a></td>");
 
-                // Branch Age
-                mailBody.append("<td>").append(staleBranch.getTimeStamp()).append("</td>");
+        // Branch Age
+        mailBody.append("<td>").append(staleBranch.getTimeStamp()).append("</td>");
 
-                // Branch avatar and author name
-                mailBody.append("<td align=\"left\"><img src=" + staleBranch.getUser().getAvatar() + "alt="
-                        + staleBranch.getUser().getLogin() + "height=\"18\" width=\"18\" /> ")
-                        .append(staleBranch.getUser().getLogin()).append("</td>");
+        // Branch avatar and author name
+        mailBody.append("<td align=\"left\"><img src=" + staleBranch.getUser().getAvatar() + "alt=" + staleBranch.getUser().getLogin() + "height=\"18\" width=\"18\" /> ")
+            .append(staleBranch.getUser().getLogin()).append("</td>");
 
-                // Jira Status
-                mailBody.append("<td>");
-                if (staleBranch.getIssue() != null)
-                {
-                    if (staleBranch.getIssue().getStatus().equalsIgnoreCase("Closed"))
-                    {
-                        mailBody.append("<font color=\"red\">").append(staleBranch.getIssue().getStatus()).append("</font>");
-                    }
-                    else
-                    {
-                        mailBody.append(staleBranch.getIssue().getStatus());
-                    }
-                }
-                else
-                {
-                    mailBody.append("n/a");
-                }
-
-                mailBody.append("</td></tr>");
-            }
+        // Jira Status
+        mailBody.append("<td>");
+        if (staleBranch.getIssue() != null) {
+          if (staleBranch.getIssue().getStatus().equalsIgnoreCase("Closed")) {
+            mailBody.append("<font color=\"red\">").append(staleBranch.getIssue().getStatus()).append("</font>");
+          } else {
+            mailBody.append(staleBranch.getIssue().getStatus());
+          }
+        } else {
+          mailBody.append("n/a");
         }
 
-        mailBody.append("</table></div></body></html>");
-
-        return mailBody.toString();
+        mailBody.append("</td></tr>");
+      }
     }
 
-    /**
-     * Wrapper method to return a new {@link MimeMessage} object.
-     *
-     * @param session The mail {@link Session}.
-     * @return The created MimeMessage object.
-     */
-    MimeMessage getMimeMessage(Session session)
-    {
-        return new MimeMessage(session);
-    }
+    mailBody.append("</table></div></body></html>");
+
+    return mailBody.toString();
+  }
+
+  /**
+   * Wrapper method to return a new {@link MimeMessage} object.
+   *
+   * @param session The mail {@link Session}.
+   * @return The created MimeMessage object.
+   */
+  MimeMessage getMimeMessage(Session session) {
+    return new MimeMessage(session);
+  }
 }
