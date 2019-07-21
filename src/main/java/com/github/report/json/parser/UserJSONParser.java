@@ -20,9 +20,13 @@ public class UserJSONParser extends JSONParser<User> {
       JSONArray jsonArray = getJSONArray(jsonData);
       for (int i = 0; i < jsonArray.length(); i++) {
         JSONObject json = jsonArray.getJSONObject(i);
+
         String[] ldap = json.getString("ldap_dn").split(",");
-        // Format of name in ldap array is CN=last\,first
-        users.add(new User.Builder().login(json.getString("login")).name(ldap[1] + " " + ldap[0].substring(3, ldap[0].length() - 1)).build());
+
+        // Format of name in ldap array is CN=last\,first. Therefore, trim CN= and the \ off and reverse the
+        // order.
+        String name = ldap[1] + " " + ldap[0].substring(3, ldap[0].length() - 1);
+        users.add(new User.Builder().login(json.getString("login")).name(name).avatar(json.getString("avatar_url")).build());
       }
     } catch (JSONException e) {
       throw new JSONParseException(e);
