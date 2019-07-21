@@ -167,7 +167,8 @@ public class Branch {
 
   @Override
   public String toString() {
-    return "[{Branch} " + "Name: " + name + ", Commit: " + commit + ", Is Active: " + isActive + ", Time Since Active: " + inactiveAge + ", Jira Story: " + jiraStory;
+    return "[{Branch} " + "Name: " + name + ", Is Active: " + isActive + ", Time Since Active: " + inactiveAge + (jiraStory != null ? ", Jira Story: " + jiraStory : "") + ", Most Recent Commit: "
+        + commit;
   }
 
   @Override

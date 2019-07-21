@@ -8,15 +8,17 @@ import com.github.report.CommandMode;
 import com.github.report.exception.CommandException;
 import com.github.report.exception.JSONParseException;
 import com.github.report.exception.RestServiceException;
+import com.github.report.object.Branch;
 import com.github.report.object.Organization;
 import com.github.report.object.Repository;
 
 /**
- *
+ * Command to display {@link Repository Repositories}. Displaying the {@link Branch} information can
+ * optionally be included.
  */
 @Parameters(commandDescription = "Displays the repository information for the given organization.", separators = "=")
 public class RepositoryCommand extends Command {
-  @Parameter(names = {"-o", "--organization"}, required = true, order = 0, description = "Team or Organization Name as displayed in GitHub")
+  @Parameter(names = {"-o", "--organization"}, required = true, order = 0, description = "Team or Organization Name as displayed in GitHub.")
   private String orgName;
 
   @Parameter(names = {"-b", "--branches"}, required = false, order = 1, description = "Flag to determine if the branches for the repositories should be included.")

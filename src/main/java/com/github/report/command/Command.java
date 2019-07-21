@@ -11,6 +11,7 @@ import com.github.report.CommandMode;
 import com.github.report.exception.CommandException;
 import com.github.report.json.parser.BranchJSONParser;
 import com.github.report.json.parser.RepoJSONParser;
+import com.github.report.json.parser.UserJSONParser;
 import com.github.report.rest.GitHubDataRetriever;
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
@@ -83,5 +84,9 @@ public abstract class Command {
 
   protected BranchJSONParser getBranchJSONParser(long stalePeriod) {
     return new BranchJSONParser(stalePeriod);
+  }
+
+  protected UserJSONParser getUserJSONParser() {
+    return new UserJSONParser();
   }
 }
