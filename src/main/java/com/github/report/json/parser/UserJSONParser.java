@@ -20,8 +20,8 @@ public class UserJSONParser extends JSONParser<User> {
       JSONArray jsonArray = getJSONArray(jsonData);
       for (int i = 0; i < jsonArray.length(); i++) {
         JSONObject json = jsonArray.getJSONObject(i);
-
-        users.add(new User.Builder().login(json.getString("login")).build());
+        String[] ldap = json.getString("ldab_dn").split(",");
+        users.add(new User.Builder().login(json.getString("login")).name(ldap[0].substring(0, ldap[0].length() - 2) + " " + ldap[1]).build());
       }
     } catch (JSONException e) {
       throw new JSONParseException(e);

@@ -57,7 +57,7 @@ public class UserCommand extends Command {
 
         for (Map.Entry<String, String> entry : users.entrySet()) {
           System.out.println("Repository: " + entry.getKey());
-          System.out.println("Users: \n" + entry.getValue());
+          System.out.println("Users: \n\t" + entry.getValue());
         }
         return true;
       }
