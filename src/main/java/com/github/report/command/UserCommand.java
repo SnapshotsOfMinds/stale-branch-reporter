@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import com.beust.jcommander.Parameter;
+import com.beust.jcommander.Parameters;
 import com.github.report.CommandMode;
 import com.github.report.exception.CommandException;
 import com.github.report.exception.JSONParseException;
@@ -21,6 +22,7 @@ import com.github.report.object.User;
  * Display {@link User} information for all the {@link Repository Repositories}. Optionally,
  * specific repositories can be filtered down. Also, able to group the users by the repositories.
  */
+@Parameters(commandDescription = "Displays the user information for the given organization's repositories.", separators = "=")
 public class UserCommand extends Command {
   @Parameter(names = {"-o", "--organization"}, required = true, order = 0, description = "Team or Organization Name as displayed in GitHub.")
   private String orgName;
@@ -50,7 +52,7 @@ public class UserCommand extends Command {
       if (groupByRepo) {
         Map<String, String> users = new HashMap<>();
         for (Repository repo : repos) {
-          users.put(repo.getRepoName(), getUserJSONParser().parse(getGitHubDataRetriever().retrieveUsers(repo.getRepoName(), org)).stream().map(e -> e.toString()).reduce("\n\t", String::concat));
+          users.put(repo.getRepoName(), getUserJSONParser().parse(getGitHubDataRetriever().retrieveUsers(repo.getRepoName(), org)).stream().map(User::toString).collect(Collectors.joining("\n\t")));
         }
 
         for (Map.Entry<String, String> entry : users.entrySet()) {
